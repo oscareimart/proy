@@ -1,8 +1,15 @@
-function Card() {
+function Card({ imgBase64, textDescription = "Texto descriptivo de QR" }) {
+  console.log(imgBase64);
+
   return (
     <div className="card bg-base-100 w-full shadow-sm mt-6">
-      <figure>
-        <img src="/qr.png" alt="Shoes" />
+      <figure className="w-60 h-60 self-center">
+        {/* <img src="/qr.png" alt="Shoes" /> */}
+        <img
+          src={`${imgBase64}`}
+          className="w-full h-full object-contain"
+          alt="QR"
+        />
       </figure>
       <div className="card-body">
         <h2 className="card-title">
@@ -10,8 +17,8 @@ function Card() {
           {/* <div className="badge badge-info">NEW</div> */}
         </h2>
         <p>
-          <b>Vista Previa: </b>A card component has a figure, a body part, and
-          inside body there are title and actions parts
+          <b>Vista Previa: </b>
+          {textDescription}
         </p>
         <div className="card-actions justify-end">
           <button className="btn">Descargar</button>

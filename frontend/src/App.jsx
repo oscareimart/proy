@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Card from "./components/ui/Card.jsx";
 import Menu from "./components/ui/Menu.jsx";
 import FormText from "./components/FormText.jsx";
 import FormUrl from "./components/FormUrl.jsx";
 import FormChat from "./components/FormChat.jsx";
+
+const URL_BACKEND = "http://127.0.0.1:3000";
 
 const menuArray = [
   {
@@ -29,6 +32,54 @@ const menuArray = [
 function App() {
   const [menu, setMenu] = useState(menuArray);
   const [menuSelected, setMenuSelected] = useState(menuArray[0]);
+  const [imgBase64, setImgBase64] = useState();
+  const [textForConvert, setTextForConvert] = useState("");
+  const [chatWhatsapp, setChatWhatsapp] = useState(null);
+
+  useEffect(() => {
+    const isURL = (texto) => {
+      try {
+        new URL(texto);
+        return true;
+      } catch {
+        return false;
+      }
+    };
+
+    const getQr = async (text) => {
+      if (text) {
+        setImgBase64("");
+        return;
+      }
+
+      let url;
+      if (isURL(text)) {
+        url = `${URL_BACKEND}/qr?url=${encodeURIComponent(text)}`;
+      } else {
+        url = `${URL_BACKEND}/qr?text=${encodeURIComponent(text)}`;
+      }
+      const response = await axios.get(url);
+
+      setImgBase64(response.data.qr);
+    };
+
+    getQr(textForConvert);
+  }, [textForConvert]);
+
+  useEffect(() => {
+    if (chatWhatsapp) {
+      const getQrPost = async () => {
+        const response = await axios.post(
+          `${URL_BACKEND}/qr-whatsapp`,
+          chatWhatsapp,
+        );
+        setTextForConvert(response?.data?.whatsappLink);
+        setImgBase64(response.data.qr);
+      };
+
+      getQrPost();
+    }
+  }, [chatWhatsapp]);
 
   const ComponentFormSelected = menuSelected.component;
   // const description = menu.find(e => e.id === menuSelected)
@@ -52,7 +103,12 @@ function App() {
         <div className="flex flex-row gap-6">
           <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl mt-6">
             <div className="card-body">
-              {ComponentFormSelected && <ComponentFormSelected />}
+              {ComponentFormSelected && (
+                <ComponentFormSelected
+                  setTextForConvert={setTextForConvert}
+                  setChatWhatsapp={setChatWhatsapp}
+                />
+              )}
               {/* <form action="" className="h-full justify-end align-bottom">
                 <TextArea />
                 <button className="btn btn-neutral mt-4 w-full">Generar</button>
@@ -60,7 +116,7 @@ function App() {
             </div>
           </div>
 
-          <Card />
+          <Card imgBase64={imgBase64} textDescription={textForConvert} />
         </div>
       </div>
     </div>
