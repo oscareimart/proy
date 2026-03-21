@@ -32,38 +32,28 @@ const menuArray = [
 function App() {
   const [menu, setMenu] = useState(menuArray);
   const [menuSelected, setMenuSelected] = useState(menuArray[0]);
-  const [imgBase64, setImgBase64] = useState();
-  const [textForConvert, setTextForConvert] = useState("");
+  const [imgBase64, setImgBase64] = useState("/sinQR.png");
+  const [textForConvert, setTextForConvert] = useState();
   const [chatWhatsapp, setChatWhatsapp] = useState(null);
+  const [isUrl, setIsUrl] = useState(false);
 
   useEffect(() => {
-    const isURL = (texto) => {
-      try {
-        new URL(texto);
-        return true;
-      } catch {
-        return false;
-      }
-    };
+    if (textForConvert) {
+      const getQr = async (text) => {
+        let url;
+        if (isUrl) {
+          url = `${URL_BACKEND}/qr?url=${encodeURIComponent(text)}`;
+        } else {
+          url = `${URL_BACKEND}/qr?text=${encodeURIComponent(text)}`;
+        }
 
-    const getQr = async (text) => {
-      if (text) {
-        setImgBase64("");
-        return;
-      }
+        const response = await axios.get(url);
 
-      let url;
-      if (isURL(text)) {
-        url = `${URL_BACKEND}/qr?url=${encodeURIComponent(text)}`;
-      } else {
-        url = `${URL_BACKEND}/qr?text=${encodeURIComponent(text)}`;
-      }
-      const response = await axios.get(url);
+        setImgBase64(response.data.qr);
+      };
 
-      setImgBase64(response.data.qr);
-    };
-
-    getQr(textForConvert);
+      getQr(textForConvert);
+    }
   }, [textForConvert]);
 
   useEffect(() => {
@@ -82,7 +72,6 @@ function App() {
   }, [chatWhatsapp]);
 
   const ComponentFormSelected = menuSelected.component;
-  // const description = menu.find(e => e.id === menuSelected)
 
   return (
     <div className="flex flex-col w-full items-center justify-center min-h-screen bg-gray-800">
@@ -94,9 +83,6 @@ function App() {
           <div className="card-body">
             <h2 className="card-title">{menuSelected.name}</h2>
             <p>{menuSelected.description}</p>
-            {/* <div className="card-actions justify-end">
-              <button className="btn btn-primary">Buy Now</button>
-            </div> */}
           </div>
         </div>
 
@@ -107,12 +93,9 @@ function App() {
                 <ComponentFormSelected
                   setTextForConvert={setTextForConvert}
                   setChatWhatsapp={setChatWhatsapp}
+                  setIsUrl={setIsUrl}
                 />
               )}
-              {/* <form action="" className="h-full justify-end align-bottom">
-                <TextArea />
-                <button className="btn btn-neutral mt-4 w-full">Generar</button>
-              </form> */}
             </div>
           </div>
 

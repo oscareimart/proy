@@ -1,12 +1,13 @@
 import { useState } from "react";
 import TextArea from "./ui/TextArea";
 
-function FormText({ setTextForConvert }) {
+function FormText({ setTextForConvert, setIsUrl }) {
   const [text, setText] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setTextForConvert(text);
+    setIsUrl(false);
   };
 
   return (

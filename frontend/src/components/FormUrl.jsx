@@ -1,12 +1,13 @@
 import Input from "./ui/Input";
 import { useState } from "react";
 
-function FormUrl({ setTextForConvert }) {
+function FormUrl({ setTextForConvert, setIsUrl }) {
   const [text, setText] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setTextForConvert(text);
+    setIsUrl(true);
   };
 
   return (

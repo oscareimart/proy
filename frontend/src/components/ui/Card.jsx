@@ -1,10 +1,16 @@
-function Card({ imgBase64, textDescription = "Texto descriptivo de QR" }) {
-  console.log(imgBase64);
+function Card({ imgBase64 = "", textDescription = "Texto descriptivo de QR" }) {
+  const handleDownload = (base64String, fileName) => {
+    const link = document.createElement("a");
+    link.href = base64String;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="card bg-base-100 w-full shadow-sm mt-6">
       <figure className="w-60 h-60 self-center">
-        {/* <img src="/qr.png" alt="Shoes" /> */}
         <img
           src={`${imgBase64}`}
           className="w-full h-full object-contain"
@@ -12,20 +18,19 @@ function Card({ imgBase64, textDescription = "Texto descriptivo de QR" }) {
         />
       </figure>
       <div className="card-body">
-        <h2 className="card-title">
-          Imagen QR
-          {/* <div className="badge badge-info">NEW</div> */}
-        </h2>
+        <h2 className="card-title">Imagen QR</h2>
         <p>
           <b>Vista Previa: </b>
           {textDescription}
         </p>
         <div className="card-actions justify-end">
-          <button className="btn">Descargar</button>
+          <button
+            className="btn"
+            onClick={() => handleDownload(imgBase64, "qr-image")}
+          >
+            Descargar
+          </button>
           {/* <button className="btn">Compartir</button> */}
-          <button className="btn">Compartir</button>
-          {/* <div className="badge badge-outline">Fashion</div>
-          <div className="badge badge-outline">Products</div> */}
         </div>
       </div>
     </div>
