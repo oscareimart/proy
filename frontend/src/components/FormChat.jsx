@@ -2,43 +2,44 @@ import Input from "./ui/Input";
 import TextArea from "./ui/TextArea";
 import { useState } from "react";
 
-function FormChat({ setChatWhatsapp }) {
+function FormChat({ onGenerate, isLoading }) {
   const [phone, setPhone] = useState("");
   const [text, setText] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setChatWhatsapp({
-      numberPhone: phone,
-      message: text,
+    onGenerate({
+      type: "chat",
+      payload: {
+        numberPhone: phone.trim(),
+        message: text.trim(),
+      },
     });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="h-full justify-end align-bottom">
-      {/* <Input /> */}
+    <form onSubmit={handleSubmit} className="form-layout">
       <Input
-        detail="Introduzca el Numero de Whatssapp"
-        legend="Nro de Telefono"
-        placeholder="76543120"
+        detail="Incluye codigo de pais si aplica. Solo digitos."
+        legend="Numero de WhatsApp"
+        placeholder="59176543120"
         onChange={(e) => setPhone(e.target.value)}
         value={phone}
         required
+        inputMode="numeric"
+        pattern="[0-9]{8,15}"
       />
       <TextArea
-        detail="Introduzca el texto para enciar como chat por Whatsapp"
-        legend="Texto Chat"
-        placeholder="Hola Informacion de..."
+        detail="El texto se abrira precargado al escanear el codigo."
+        legend="Mensaje inicial"
+        placeholder="Hola, quiero mas informacion sobre sus servicios."
         onChange={(e) => setText(e.target.value)}
         value={text}
         required
+        maxLength={500}
       />
-      <button
-        // type="button"
-        className="btn btn-neutral mt-4 w-full"
-        // onClick={() => handleSubmit()}
-      >
-        Generar
+      <button className="primary-button" disabled={isLoading}>
+        {isLoading ? "Generando..." : "Generar QR"}
       </button>
     </form>
   );

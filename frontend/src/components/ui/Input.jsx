@@ -6,15 +6,15 @@ function Input({
   ...props
 }) {
   return (
-    <fieldset className="fieldset">
-      <legend className="fieldset-legend">{legend}</legend>
+    <fieldset className="field-block">
+      <legend className="field-legend">{legend}</legend>
       <input
         type={type}
-        className="input"
+        className="field-input"
         placeholder={placeholder}
         {...props}
       />
-      <p className="label">{detail}</p>
+      <p className="field-detail">{detail}</p>
     </fieldset>
   );
 }

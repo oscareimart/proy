@@ -1,27 +1,31 @@
 import { useState } from "react";
 import TextArea from "./ui/TextArea";
 
-function FormText({ setTextForConvert, setIsUrl }) {
+function FormText({ onGenerate, isLoading }) {
   const [text, setText] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setTextForConvert(text);
-    setIsUrl(false);
+    onGenerate({
+      type: "text",
+      payload: text.trim(),
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="h-full justify-end align-bottom">
-      {/* <Input /> */}
+    <form onSubmit={handleSubmit} className="form-layout">
       <TextArea
-        legend="Texto Plano"
-        detail="Introduzca cualquier texto para generar el QR"
-        placeholder="Aca va tu Texto Largo..."
+        legend="Texto"
+        detail="Escribe el contenido que deseas convertir en QR."
+        placeholder="Ejemplo: horario de atencion, instrucciones, codigo de acceso..."
         onChange={(e) => setText(e.target.value)}
         value={text}
         required
+        maxLength={1024}
       />
-      <button className="btn btn-neutral mt-4 w-full">Generar</button>
+      <button className="primary-button" disabled={isLoading}>
+        {isLoading ? "Generando..." : "Generar QR"}
+      </button>
     </form>
   );
 }
