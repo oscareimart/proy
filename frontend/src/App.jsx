@@ -33,7 +33,7 @@ const menuArray = [
   {
     id: "chat",
     name: "WhatsApp",
-    eyebrow: "Contacto inmediato",
+    eyebrow: "Mensaje Inmediato",
     description:
       "Genera un QR con mensaje prellenado para abrir una conversación de WhatsApp en un toque.",
     helper:
@@ -55,7 +55,10 @@ function App() {
 
     try {
       if (type === "chat") {
-        const response = await axios.post(`${URL_BACKEND}/qr-whatsapp`, payload);
+        const response = await axios.post(
+          `${URL_BACKEND}/qr-whatsapp`,
+          payload,
+        );
         setPreviewText(response.data.whatsappLink);
         setImgBase64(response.data.qr);
         setStatus("success");
@@ -93,34 +96,14 @@ function App() {
       <section className="hero-panel">
         <div className="hero-copy">
           <span className="hero-badge">Generador QR listo para producción</span>
-          <h1 className="hero-title">Convierte cualquier acción en un escaneo claro y rápido.</h1>
-          <p className="hero-subtitle">
-            Diseñamos una interfaz más cómoda para crear códigos QR de texto,
-            enlaces y WhatsApp sin fricción, con vista previa inmediata y una
-            composición pensada para desktop y móvil.
-          </p>
+          <h1 className="hero-title">𖣯 QR Generator 📲</h1>
 
-          <div className="hero-stats">
-            <div className="hero-stat-card">
-              <strong>3 modos</strong>
-              <span>Texto, URL y WhatsApp</span>
-            </div>
-            <div className="hero-stat-card">
-              <strong>Vista previa</strong>
-              <span>Resultado listo para descargar</span>
-            </div>
-            <div className="hero-stat-card">
-              <strong>Flujo simple</strong>
-              <span>Menos pasos, más claridad</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="hero-orbit" aria-hidden="true">
-          <div className="hero-orbit-ring"></div>
-          <div className="hero-orbit-card">
-            <span className="hero-orbit-label">{menuSelected.eyebrow}</span>
-            <p>{menuSelected.description}</p>
+          <div className="hero-stat-card mt-5">
+            <p>
+              📌Genera cualquir codigo QR listo para escanear o descargar, en
+              tres modos disponibles, Texto, URL y WhatsApp. Listo para
+              descargar y con flujo simple para el usuario.
+            </p>
           </div>
         </div>
       </section>
