@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Analytics } from "@vercel/analytics/next"
 import axios from "axios";
 import Card from "./components/ui/Card.jsx";
 import Menu from "./components/ui/Menu.jsx";
@@ -92,68 +93,71 @@ function App() {
   const ComponentFormSelected = menuSelected.component;
 
   return (
-    <main className="app-shell">
-      <section className="hero-panel">
-        <div className="hero-copy">
-          <span className="hero-badge">Generador QR listo para producción</span>
-          <h1 className="hero-title">𖣯 QR Generator 📲</h1>
+    <>
+      <Analytics />
+      <main className="app-shell">
+        <section className="hero-panel">
+          <div className="hero-copy">
+            <span className="hero-badge">Generador QR listo para producción</span>
+            <h1 className="hero-title">𖣯 QR Generator 📲</h1>
 
-          <div className="hero-stat-card mt-5">
-            <p>
-              📌Genera cualquir codigo QR listo para escanear o descargar, en
-              tres modos disponibles, Texto, URL y WhatsApp. Listo para
-              descargar y con flujo simple para el usuario.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="workspace-grid">
-        <div className="surface-panel control-panel">
-          <div className="section-heading">
-            <span className="section-kicker">Configuración</span>
-            <h2>Elige el tipo de QR que necesitas</h2>
-            <p>
-              Cambia de modo sin salir de la pantalla y completa solo los datos
-              esenciales.
-            </p>
-          </div>
-
-          <Menu
-            menu={menuArray}
-            selectedId={menuSelected.id}
-            setMenuSelected={handleSelectMenu}
-          />
-
-          <div className="mode-summary">
-            <span className="mode-summary-kicker">{menuSelected.eyebrow}</span>
-            <h3>{menuSelected.name}</h3>
-            <p>{menuSelected.description}</p>
-            <small>{menuSelected.helper}</small>
-          </div>
-
-          {ComponentFormSelected && (
-            <ComponentFormSelected
-              onGenerate={handleGenerate}
-              isLoading={status === "loading"}
-            />
-          )}
-
-          {errorMessage ? (
-            <div className="feedback-message" role="alert">
-              {errorMessage}
+            <div className="hero-stat-card mt-5">
+              <p>
+                📌Genera cualquir codigo QR listo para escanear o descargar, en
+                tres modos disponibles, Texto, URL y WhatsApp. Listo para
+                descargar y con flujo simple para el usuario.
+              </p>
             </div>
-          ) : null}
-        </div>
+          </div>
+        </section>
 
-        <Card
-          imgBase64={imgBase64}
-          textDescription={previewText}
-          status={status}
-          menuLabel={menuSelected.name}
-        />
-      </section>
-    </main>
+        <section className="workspace-grid">
+          <div className="surface-panel control-panel">
+            <div className="section-heading">
+              <span className="section-kicker">Configuración</span>
+              <h2>Elige el tipo de QR que necesitas</h2>
+              <p>
+                Cambia de modo sin salir de la pantalla y completa solo los datos
+                esenciales.
+              </p>
+            </div>
+
+            <Menu
+              menu={menuArray}
+              selectedId={menuSelected.id}
+              setMenuSelected={handleSelectMenu}
+            />
+
+            <div className="mode-summary">
+              <span className="mode-summary-kicker">{menuSelected.eyebrow}</span>
+              <h3>{menuSelected.name}</h3>
+              <p>{menuSelected.description}</p>
+              <small>{menuSelected.helper}</small>
+            </div>
+
+            {ComponentFormSelected && (
+              <ComponentFormSelected
+                onGenerate={handleGenerate}
+                isLoading={status === "loading"}
+              />
+            )}
+
+            {errorMessage ? (
+              <div className="feedback-message" role="alert">
+                {errorMessage}
+              </div>
+            ) : null}
+          </div>
+
+          <Card
+            imgBase64={imgBase64}
+            textDescription={previewText}
+            status={status}
+            menuLabel={menuSelected.name}
+          />
+        </section>
+      </main>
+    </>
   );
 }
 
